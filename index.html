@@ -1,0 +1,167 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="home.css">
+</head>
+
+<body>
+
+    <div class="container_outer">
+        <div class="container">
+            <img src="main wall-01.svg" class="main_wall">
+            <img src="right wall.svg" class="right_wall">
+            <img src="left wall.svg" class="left_wall">
+            <img src = "floor.svg" class="floor">
+            <img src = "top-01.svg" class="top">
+        </div>
+    </div>
+
+    <div class="directions">
+        <div>W</div>
+        <span>A</span>
+        <span class="dirIndi">+</span>
+        <span>D</span>
+        <div>S</div>
+        <div>I</div>
+        <span>J</span>
+        <span class="dirIndi">Look Around</span>
+        <span>L</span>
+        <div>K</div>
+    </div>
+
+    <script>
+
+        var table = document.querySelector(".table");
+        document.body.addEventListener('keypress', move);
+        document.body.addEventListener('keyup', jump);
+
+        //Rotate
+        //window.addEventListener('mousemove', rotate);
+
+        var z = 0;
+        var x = 0;
+
+        //var maxZ = document.querySelector(".floor").offsetHeight;
+        var maxZ = 300;
+
+        //var rotateY = -1 * (x / innerWidth) * 360;
+        //var rotateX = -1 * (y / innerHeight) * 360;
+
+        //Add the rotate event listener, after the first mousemove event occurs, in which you'll capture the oldX and oldY values (remove this initial event listener once it has occurred)
+
+        var oldX = 0, oldY = 0;
+
+        var rotateY = 0;
+        var rotateX = 0;
+
+        function move(e) {
+            document.querySelector(".container").style.transition = "0s";
+            //w
+            if (e.keyCode == 119) {
+                z = z + 5;
+            }
+            //s
+            else if (e.keyCode == 115) {
+                z = z - 5;
+            }
+            //a
+            else if (e.keyCode == 97) {
+                x = x + 5;
+            }
+            //d
+            else if (e.keyCode == 100) {
+                x = x - 5;
+            }
+            //up i
+            else if (e.keyCode == 105) {
+                rotateX += 1;
+            }
+            //down k
+            else if (e.keyCode == 107) {
+                rotateX -= 1;
+            }
+            //left j
+            else if (e.keyCode == 106) {
+                rotateY -= 1;
+            }
+            //right l
+            else if (e.keyCode == 108) {
+                rotateY += 1;
+            }
+
+            if (rotateY > 90) {
+                rotateY = 90;
+            }
+            else if (rotateY < -90) {
+                rotateY = -90;
+            }
+
+            if (rotateX > 90) {
+                rotateX = 90;
+            }
+            else if (rotateX < -90) {
+                rotateX = -90;
+            }
+
+            if (z > 600) {
+                z = 600;
+            }
+            else if (z < -1*maxZ) {
+                z = -1*maxZ;
+            }
+
+
+            document.querySelector(".container").style.transformOrigin = innerWidth / 2 - x + "px " + "50% " + (1000 - z) + "px";
+            //Why is rotate not working after translation in z axis XD
+            document.querySelector(".container").style.transform = "translateZ(" + z + "px) translateX(" + x + "px)" + "rotateX(" + rotateX + "deg) " + "rotateY(" + rotateY + "deg)";
+        }
+
+        function jump(e) {
+            //spacebar              
+            if (e.keyCode == 32) {
+                //Jump
+                var up = 10;
+                document.querySelector(".container").style.transition = "0.6s";
+                document.querySelector(".container").style.transform = "translateZ(" + z + "px) translateX(" + x + "px)" + "rotateX(" + rotateX + "deg) " + "rotateY(" + rotateY + "deg)" + "translateY(" + up + "%)";
+                setTimeout(() => {
+                    document.querySelector(".container").style.transform = "translateZ(" + z + "px) translateX(" + x + "px)" + "rotateX(" + rotateX + "deg) " + "rotateY(" + rotateY + "deg)" + "translateY(0%)";
+                }, 600);
+            }
+        }
+
+        function rotate(e) {
+
+            var xPos = e.pageX - oldX;
+
+            var yPos = e.pageY - oldY;
+
+            rotateY = (e.pageX / innerWidth) * 360;
+            rotateX = -1 * (e.pageY / innerHeight) * 360;
+
+            if (rotateY > 90) {
+                rotateY = 90;
+            }
+            else if (rotateY < -90) {
+                rotateY = -90;
+            }
+
+            if (rotateX > 90) {
+                rotateX = 90;
+            }
+            else if (rotateX < -90) {
+                rotateX = -90;
+            }
+
+            console.log(rotateX);
+            console.log(rotateY);
+
+            document.querySelector(".container").style.transform = "translateZ(" + z + "px) translateX(" + x + "px)" + "rotateX(" + rotateX + "deg) " + "rotateY(" + rotateY + "deg)";
+
+            oldX = e.pageX;
+            oldY = e.pageY;
+        }
+
+    </script>
+</body>
+
+</html>
